@@ -5,27 +5,22 @@ using UnityEngine;
 public class cryro_control : MonoBehaviour {
 
     Rigidbody2D Borracho;
-    public float dificulty;
-    public float speed;
-    public Transform camera;
-
+    Game_Manager gm; 
 
     void Start()
     {
-#if UNITY_ANDROID
-            Input.gyro.enabled = true;
-#endif
 
         Borracho = GetComponent<Rigidbody2D>();
+        gm = FindObjectOfType<Game_Manager>();
     }
 
 
-    void Update()
+    void FixedUpdate() //<----for physics and calculations, more accurate. 
     {
        //Borracho's walk function
-        Borracho.AddForce(new Vector2(dificulty * Input.gyro.rotationRate.y, speed));
+        Borracho.AddForce(new Vector2(gm.borracho_sensibility * Input.gyro.rotationRate.y, gm.borracho_speed));
 
-        camera.localPosition = new Vector3(0,transform.localPosition.y+2.5f,-20);
+        //camera.localPosition = new Vector3(0,transform.localPosition.y+2.5f,-20);
 
     }
 
