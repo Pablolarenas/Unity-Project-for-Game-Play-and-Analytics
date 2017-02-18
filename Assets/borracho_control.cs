@@ -53,19 +53,31 @@ public class borracho_control : MonoBehaviour {
             //////Debug.Log("Game Over");
             //////Game_Over.SetActive(true);
         }
+
+        else if (coll.gameObject.tag == "buddie")
+        {
+            gm.bonus();
+        }
+
     }
 
 
     void OnTriggerEnter2D(Collider2D coll)
     {
    
-        if (coll.gameObject.tag == "pinta")
-        {
+        if (coll.gameObject.tag == "pinta") {
             gm.drink();
             Destroy(coll.gameObject);
         }
 
+        if (coll.gameObject.tag == "food") {
+            gm.eat();
+            Destroy(coll.gameObject);
+        }
+
     }
+
+
 
     IEnumerator hit_car()
     {
