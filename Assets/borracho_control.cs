@@ -20,17 +20,19 @@ public class borracho_control : MonoBehaviour {
         gm = FindObjectOfType<Game_Manager>();
         Borracho = GetComponent<Rigidbody2D>();
 
+        //initial force applied to the character 
         Borracho.AddForce(new Vector2(0, gm.speed));
 
     }
 
     void Update()
     {
-        //Borracho's walk function
+        //Character controls 
         Borracho.AddForce(new Vector2(gm.dificulty * Input.gyro.rotationRate.y, 0));
         camera.localPosition = new Vector3(0,transform.localPosition.y+2.5f,-20);
     }
 
+    //Obstacles
     void OnCollisionEnter2D(Collision2D coll) {
         if (coll.gameObject.tag == "cop")
         {
@@ -54,14 +56,11 @@ public class borracho_control : MonoBehaviour {
             //////Game_Over.SetActive(true);
         }
 
-        else if (coll.gameObject.tag == "buddie")
-        {
-            gm.bonus();
-        }
+      
 
     }
 
-
+    //Collectables and Bonus
     void OnTriggerEnter2D(Collider2D coll)
     {
    
@@ -75,10 +74,14 @@ public class borracho_control : MonoBehaviour {
             Destroy(coll.gameObject);
         }
 
+        if (coll.gameObject.tag == "buddie")
+        {
+            gm.bonus();
+        }
     }
 
 
-
+    //after character gets hit by a car 
     IEnumerator hit_car()
     {
         yield return new WaitForSeconds(2);
