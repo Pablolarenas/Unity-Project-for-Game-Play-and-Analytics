@@ -7,7 +7,7 @@ public class borracho_control : MonoBehaviour {
     Rigidbody2D Borracho;
    
     public Transform camera;
-    public GameObject Game_Over;
+
     Game_Manager gm;
 
 
@@ -36,16 +36,12 @@ public class borracho_control : MonoBehaviour {
     void OnCollisionEnter2D(Collision2D coll) {
         if (coll.gameObject.tag == "cop")
         {
-            Time.timeScale = 0;
-            Debug.Log("Game Over");
-            Game_Over.SetActive(true);
+            gm.game_over();
         }
 
         else if (coll.gameObject.tag == "hole")
         {
-            Time.timeScale = 0;
-            Debug.Log("Game Over");
-            Game_Over.SetActive(true);
+            gm.game_over();
         }
 
         else if (coll.gameObject.tag == "car")

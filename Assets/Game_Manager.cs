@@ -6,7 +6,9 @@ using UnityEngine.SceneManagement;
 
 public class Game_Manager : MonoBehaviour {
 
-//Game manager variables
+    //Game manager variables
+    int countdown = 10;
+    public GameObject Game_Over;
     int score = 0;
     int number_of_drinks = 0;
     public float dificulty;
@@ -29,10 +31,11 @@ public class Game_Manager : MonoBehaviour {
     int multiplier = 1;
 
 
-    // Use this for initialization
+ // Use this for initialization
     void Start () {
         audio = GetComponents<AudioSource>();
-	}
+        InvokeRepeating("substact_time_to_countdown", 1, 1);
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -72,16 +75,16 @@ public class Game_Manager : MonoBehaviour {
         //sound
         audio[0].clip = eat_sound;
         audio[0].Play();
-
+        countdown += 5;
 
         if (number_of_drinks>0)
         {
         number_of_drinks--;
+
             if (number_of_drinks % 2 != 0)
             {
                 current_number_image--;
                 Drunkmeter[current_number_image].color = desactivado;
-
             }
         }
     }
@@ -127,4 +130,25 @@ public void restart_game ()
         yield return new WaitForSeconds(5);
         multiplier = 1;
     }
+
+    // coutdown 
+    void substact_time_to_countdown()
+    {
+        countdown--;
+        Debug.Log(countdown);
+
+         if (countdown<0)
+        {
+            game_over();
+        }
+    }
+
+    //game over
+    public void game_over()
+    {
+        Time.timeScale = 0;
+        Debug.Log("Game Over");
+        Game_Over.SetActive(true);
+    }
 }
+
