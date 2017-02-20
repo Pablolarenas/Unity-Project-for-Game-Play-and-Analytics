@@ -9,6 +9,7 @@ public class Game_Manager : MonoBehaviour {
     //Game manager variables
     int countdown = 20;
     float countdown_borrachera = 5.0f;
+    float countdown_bonus = 10.0f;
     public GameObject Game_Over;
     int score = 0;
     int number_of_drinks = 0;
@@ -17,11 +18,12 @@ public class Game_Manager : MonoBehaviour {
     public Text score_text;
     public Text countdown_text;
     public Text count_down_borrachera;
+    public Text count_down_bonus;
     public Animator Borracho_state_camera;
-
     bool is_borrachera = false;
+    bool is_bonus = false;
 
-//sounds slots
+    //sounds slots
     public AudioClip drink_sound;
     public AudioClip burp_sound;
     public AudioClip back_normal_sound;
@@ -37,6 +39,9 @@ public class Game_Manager : MonoBehaviour {
     int multiplier = 1;
     float borrachera_contador = 0;
 
+    //for bonus
+    float bonus_contador = 0;
+
  // Use this for initialization
     void Start () {
         audio = GetComponents<AudioSource>();
@@ -45,15 +50,44 @@ public class Game_Manager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+#if UNITY_WEBGL
 
+        if (!is_borrachera) {
+            if (Input.GetKey(KeyCode.RightArrow))
+            {
+                move_right();
+            }
+            if (Input.GetKey(KeyCode.LeftArrow))
+            {
+                move_left();
+            }
+        } else
+        {
+            if (Input.GetKey(KeyCode.RightArrow))
+            {
+                move_left();
+            }
+            if (Input.GetKey(KeyCode.LeftArrow))
+            {
+                move_right();
+            }
+        }
+        
+#endif
         if (is_borrachera) {
             borrachera_contador += Time.deltaTime;
 
             count_down_borrachera.text = "" + (int)(countdown_borrachera - borrachera_contador);
         }
 
+        if (is_bonus)
+        {
+            bonus_contador += Time.deltaTime;
+
+            count_down_bonus.text = "" + (int)(countdown_bonus - bonus_contador);
+        }
         //Debug.Log((int)(countdown_borrachera-Time.time));
-	}
+    }
 
     //drinking effects 
     public void drink () {
@@ -113,21 +147,13 @@ public class Game_Manager : MonoBehaviour {
     //bonus effects 
     public void bonus ()
     {
+        is_bonus = true;
         multiplier=2;
         //sound
         audio[1].Play();
         StartCoroutine(bonus_time());
 
     }
-
-
-    //void OnGUI()
-    //{
-    //    GUI.Label(new Rect(10, 10, 100, 20), "" + score);
-
-    //    GUI.Label(new Rect(10, 20, 100, 20), "" + Time.time);
-    //}
-
 
 public void restart_game ()
     {
@@ -153,13 +179,18 @@ public void restart_game ()
         Drunkmeter[2].color = desactivado;
         Drunkmeter[3].color = desactivado;
         Borracho_state_camera.SetBool("start", false);
+        borrachera_contador = 0;
     }
 
 // bonus timmer
     IEnumerator bonus_time()
     {
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(10);
+        is_bonus = false;
+        countdown_bonus = 10.0f;
+        count_down_bonus.text = "";
         multiplier = 1;
+        bonus_contador = 0;
     }
 
     // coutdown 
@@ -168,7 +199,7 @@ public void restart_game ()
         countdown--;
         countdown_text.text=""+countdown;
 
-         if (countdown<0)
+         if (countdown<=0)
         {
             game_over();
         }
@@ -180,6 +211,19 @@ public void restart_game ()
         Time.timeScale = 0;
         Debug.Log("Game Over");
         Game_Over.SetActive(true);
+    }
+
+    //webGLK Controls
+    public Rigidbody2D Borracho;
+
+    public void move_right()
+    {
+        Borracho.AddForce(new Vector2(2, 0));
+    }
+
+    public void move_left()
+    {
+        Borracho.AddForce(new Vector2(-2, 0));
     }
 }
 

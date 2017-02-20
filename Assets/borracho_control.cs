@@ -48,9 +48,6 @@ public class borracho_control : MonoBehaviour {
         else if (coll.gameObject.tag == "car")
         {
             StartCoroutine(hit_car());
-            //////Time.timeScale = 0;
-            //////Debug.Log("Game Over");
-            //////Game_Over.SetActive(true);
         }
 
       
