@@ -37,6 +37,7 @@ public class borracho_control : MonoBehaviour {
         if (coll.gameObject.tag == "cop")
         {
             gm.game_over();
+            gm.restart_game();
         }
 
         else if (coll.gameObject.tag == "hole")
@@ -59,7 +60,8 @@ public class borracho_control : MonoBehaviour {
     //Collectables and Bonus
     void OnTriggerEnter2D(Collider2D coll)
     {
-   
+
+        Debug.Log(coll.gameObject.tag);
         if (coll.gameObject.tag == "pinta") {
             gm.drink();
             Destroy(coll.gameObject);
