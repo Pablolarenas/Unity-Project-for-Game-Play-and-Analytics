@@ -28,6 +28,7 @@ public class Game_Manager : MonoBehaviour {
     public AudioClip burp_sound;
     public AudioClip back_normal_sound;
     public AudioClip eat_sound;
+    public AudioClip game_over_sound;
     AudioSource[] audio;
 
 //drunkmeter variables
@@ -208,9 +209,13 @@ public void restart_game ()
     //game over
     public void game_over()
     {
+        //sound
+        audio[0].clip = game_over_sound;
+        audio[0].Play();
         Time.timeScale = 0;
         Debug.Log("Game Over");
         Game_Over.SetActive(true);
+
     }
 
     //webGLK Controls
